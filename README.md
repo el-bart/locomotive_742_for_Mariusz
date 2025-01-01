@@ -1,8 +1,10 @@
 # locomotive 742
 
-from [printables](https://www.printables.com/model/5478-locomotive-742-h0/files).
+base bodel is from [printables](https://www.printables.com/model/5478-locomotive-742-h0/files).
+these are _not_ my files and thus it's not covered by license mentione below.
+all my reworks and OpenSCAD models do.
 
-rework to facilitate 5x 0.5V photovoltanic panels and a DC/DC to keep the LEDs on.
+rework to facilitate 5x 0.5V photovoltanic panels, LiPo battery and a DC/DC to keep the LEDs on.
 also added some model simplifications for easier FDM 3D printing.
 
 
