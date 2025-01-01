@@ -1,4 +1,4 @@
-module tracks(length)
+module tracks(length, off)
 {
   sleeper_size = [70, 13, 5];
   sleeper_span = 20;
@@ -19,12 +19,13 @@ module tracks(length)
       cube(track_size + [0, 0, sleeper_size.z]);
   }
 
-  for(dir = [-1, +1])
-    track(dir);
+  translate([0, -off, 0])
+    for(dir = [-1, +1])
+      track(dir);
   for(dy = [0 : sleeper_span+sleeper_size.y : length])
     translate([0, dy, 0])
       sleeper();
 }
 
 
-tracks(length=343); // ~320mm, with a nice, flat finish at the end
+tracks(length=320, off=5); // ~320mm, with a nice, flat finish at the end
