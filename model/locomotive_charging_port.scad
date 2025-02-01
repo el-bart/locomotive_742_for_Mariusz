@@ -3,8 +3,8 @@ include <m3d/all.scad>
 magnet_d = 6;
 magnet_h = 3;
 magnet_surround = 2;
-rounding = 1;
 spacing = 0.1;
+cable_width = 1.8;
 
 
 module magnet_mock()
@@ -15,7 +15,45 @@ module magnet_mock()
 
 module charging_port()
 {
-  
+  w = magnet_surround;
+  d = magnet_d;
+  side = d+2*w;
+  cw = cable_width;
+
+  module bottom()
+  {
+    difference()
+    {
+      s = side*[1,1,0] + [0,0,magnet_h];
+      cube(s);
+      translate([s.x/2, s.y/2, -eps])
+        cylinder(d=magnet_d+2*spacing, h=magnet_h+2*eps, $fn=fn(50));
+    }
+  }
+
+  module top()
+  {
+    translate([0, side, magnet_h])
+      rotate([90, 0, 0])
+        linear_extrude(side)
+          polygon([
+            [0, 0],
+            [0, d],
+            [side, 0]
+          ]);
+  }
+
+  difference()
+  {
+    union()
+    {
+      bottom();
+      top();
+    }
+    // cable hole
+    translate([-side/2, side/2-cw/2, magnet_h-eps])
+      cube([side, cw, cw+eps]);
+  }
 }
 
 
@@ -23,7 +61,9 @@ module charging_plug()
 {
   w = magnet_surround;
   s = [magnet_d+2*w, 20, magnet_h+w];
-  cw = 1.8; // cable width
+  cw = cable_width;
+  rounding = 2;
+
   difference()
   {
     side_rounded_cube(s, rounding, $fn=fn(20));
@@ -47,9 +87,8 @@ module charging_plug()
 }
 
 
-charging_port();
+rotate([0, -90, 0])
+  charging_port();
 
-if(0) // TODO
-for(dx = [0:1])
-  translate([-(dx+1)*(magnet_d + 2*magnet_surround + 4), 0, 0])
-    charging_plug();
+translate([3, 0, 0])
+  charging_plug();
