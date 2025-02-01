@@ -12,7 +12,7 @@ also added some model simplifications for easier FDM 3D printing.
 
 while thing is meant to be running from 1S LiPo cell.
 
-5x0.5V@0.16W PV panels will deliver top current of 64mA.
+5x0.5V at 0.16W PV panels will deliver top current of 64mA.
 taking into consideration imperfect lightning conditions, will assume 30mA from now on.
 assuming 50% of that time is night, that gives 15mA continuous power that can be used.
 
