@@ -4,7 +4,7 @@ magnet_d = 6;
 magnet_h = 3;
 magnet_surround = 2;
 spacing = 0.1;
-cable_width = 1.8;
+cable_width = 2.4+0.4;
 
 
 module magnet_mock()
@@ -19,12 +19,13 @@ module charging_port()
   d = magnet_d;
   side = d+2*w;
   cw = cable_width;
+  extra_bottom_h = 1;
 
   module bottom()
   {
     difference()
     {
-      s = side*[1,1,0] + [0,0,magnet_h];
+      s = side*[1,1,0] + [0,0,magnet_h+extra_bottom_h];
       cube(s);
       translate([s.x/2, s.y/2, -eps])
         cylinder(d=magnet_d+2*spacing, h=magnet_h+2*eps, $fn=fn(50));
@@ -33,7 +34,7 @@ module charging_port()
 
   module top()
   {
-    translate([0, side, magnet_h])
+    translate([0, side, magnet_h+extra_bottom_h])
       rotate([90, 0, 0])
         linear_extrude(side)
           polygon([
