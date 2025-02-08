@@ -2,15 +2,15 @@ include <m3d/all.scad>
 
 wall = 0.45*3;
 
-box_size = [45, 40+5, 40];
+box_size = [45-1.3, 40+5, 40];
 
 fan_size = [40, 40, 10];
-fan_spacing = 0.75;
+fan_spacing = 0.5;
 fan_angle = 57; // [deg] from vertical
 fan_rim = 1.5;
 fan_mount_size = fan_size + (fan_spacing + wall)*[2,2,0] + [0,0,wall];
 
-bottom_space = 15;
+bottom_space = 10 + wall;
 
 assert(fan_rim > fan_spacing);
 
@@ -61,19 +61,46 @@ module box()
     assembly();
   }
 
+  module ventilation_holes()
+  {
+    off = 2;
+    cut_size = [30, 3*wall, off];
+    for(z=[1:8])
+      translate([wall + off, -wall, 8 + z*(off + wall)])
+        cube(cut_size);
+  }
+
+  module cable_holes()
+  {
+    translate(wall*[0,-1,1])
+    {
+      // GND and +5V lines
+      dx = wall+2;
+      s = [10+2, 5, 5+2];
+      for(x=[dx, box_size.x-dx-s.x])
+        translate([x, 0, 0])
+          cube(s);
+      // USB-C socket
+      translate([box_size.x-dx-12, box_size.y-wall, 0])
+     cube([12, 3*wall, 8]);
+    }
+  }
+
   difference()
   {
     main();
     // diagonal cut
     translate([-eps, box_size.y, bottom_space])
       rotate([fan_angle, 0, 0])
-        cube(2*box_size);
+        cube(2*[box_size.x, box_size.y, 0] + [0, 0, fan_mount_size.y]);
+    ventilation_holes();
+    cable_holes();
   }
   // fan_mount assembly
-  translate([(box_size.x - fan_mount_size.x)/2, 0, 0])
-    translate([-eps, box_size.y, bottom_space])
-      rotate([fan_angle-90, 0, 0])
-        fan_mount();
+  assert( box_size.x - fan_mount_size.x == 0 );
+  translate([-eps, box_size.y, bottom_space])
+    rotate([fan_angle-90, 0, 0])
+      fan_mount();
 }
 
 box();
